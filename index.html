@@ -125,27 +125,32 @@
 
 <html>
 <head>
-	<title>The Augmented Image Prior: Distilling 1000 Classes by Extrapolating from a Single Image</title>
+	<title>Self-Ordering Point Clouds</title>
 	<meta property="og:image" content="Path to my teaser.png"/>
-	<meta property="og:title" content="The augmented image prior: Distilling 1000 classes by extrapolating from a single image" />
-	<meta property="og:description" content="What can neural networks learn about the visual world when provided with only a single image as input? While any image obviously cannot contain the multitudes of all existing objects, scenes and lighting conditions -- within the space of all  256<sup>3x224x224</sup> possible 224-sized square images, it might still provide a strong prior for natural images. To analyze this ``augmented image prior'' hypothesis, we develop a simple framework for training neural networks from scratch using a single image and augmentations using knowledge distillation from a supervised pretrained teacher. With this, we find the answer to the above question to be: `surprisingly, a lot'.  In quantitative terms, we find accuracies of 94%/74% on CIFAR-10/100, 69% on ImageNet, and by extending this method to video and audio, 51% on Kinetics-400 and 84% on SpeechCommands. In extensive analyses spanning 13 datasets, we disentangle the effect of augmentations, choice of data and network architectures and also provide qualitative evaluations that include lucid ``panda neurons'' in networks that have never even seen one."/>
+	<meta property="og:title" content="Self-Ordering Point Clouds" />
+	<meta property="og:description" content="In this paper we address the task of finding representative subsets of points in a 3D point cloud by means of a point-wise ordering. Only a few works have tried to address this challenging vision problem, all with the help of hard to obtain point and cloud labels. Different from these works, we introduce the task of point-wise ordering in 3D point clouds through self-supervision, which we call self-ordering. We further contribute the first end-to-end trainable network that learns a point-wise ordering in a self-supervised fashion. It utilizes a novel differentiable point scoring-sorting strategy and it constructs an hierarchical contrastive scheme to obtain self-supervision signals. We extensively ablate the method and show its superior performance even compared to supervised ordering methods on multiple datasets and tasks including zero-shot ordering of point clouds from unseen categories."/>
 </head>
 
 <body>
 	<br>
 	<center>
-		<span style="font-size:32px">The Augmented Image Prior: <br> Distilling 1000 Classes by Extrapolating from a Single Image</span>
+		<span style="font-size:32px">Self-Ordering Point Clouds</span>
 		<table align=center width=600px>
 			<table align=center width=600px>
 				<tr>
 					<td align=center width=100px>
 						<center>
-							<span style="font-size:24px"><a href="https://yukimasano.github.io/">Yuki M. Asano*</a></span>
+							<span style="font-size:24px"><a href="https://scholar.google.com/citations?user=MDqNNcAAAAAJ&hl=en&oi=ao">Pengwan Yang</a></span>
 						</center>
 					</td>
 					<td align=center width=100px>
 						<center>
-							<span style="font-size:24px"><a href="https://aqibsaeed.github.io/">Aaqib Saeed*</a></span>
+							<span style="font-size:24px"><a href="https://www.ceessnoek.info/"> Cees G.M. Snoek</a></span>
+						</center>
+					</td>
+					<td align=center width=100px>
+						<center>
+							<span style="font-size:24px"><a href="https://yukimasano.github.io/">Yuki M. Asano</a></span>
 						</center>
 					</td>
 				</tr>
@@ -153,12 +158,7 @@
 			<br>
 			<table align=center>
 				<tr>
-					<td align=center>*Equal Contribution</td>
-				</tr>
-			</table>
-			<table align=center>
-				<tr>
-					<td align=center>ICLR 2023 Paper</td>
+					<td align=center>ICCV 2023 Paper</td>
 				</tr>
 			</table>
 			<br>
@@ -166,12 +166,12 @@
 				<tr>
 					<td align=center width=100px>
 						<center>
-							<span style="font-size:24px"><a href='http://www.arxiv.org/abs/2112.00725'>[Paper]</a></a></span>
+							<span style="font-size:24px"><a href='https://arxiv.org/pdf/2304.00961.pdf'>[Paper]</a></a></span>
 						</center>
 					</td>
 					<td align=center width=100px>
 						<center>
-							<span style="font-size:24px"><a href='https://github.com/yukimasano/single-img-extrapolating'>[Code & pretrained models]</a></span>
+							<span style="font-size:24px"><a href='#'>[Code](Coming soon)</a></span>
 						</center>
 					</td>
 				</tr>
@@ -185,7 +185,7 @@
 			<tr>
 				<td width=260px>
 					<center>
-						<img class="round" style="width:800px" src="./resources/animation_final.gif"/>
+						<img class="round" style="width:800px" src="./resources/1_task.png"/>
 					</center>
 				</td>
 			</tr>
@@ -193,10 +193,13 @@
 		<table align=center width=850px>
 			<tr>
 				<td>
-					<b>Extrapolating from one image.</b> Strongly augmented patches from a single image are used to train a student (S) to distinguish semantic classes, such as those in ImageNet.
-					The student neural network is initialized randomly and learns from a pretrained teacher (T) via  KL-divergence. 
-					Although almost none of target categories are present in the image, we find student performances of > 69% for classifying ImageNet's 1000 classes.
-					In this paper, we develop this single datum learning framework and investigate it across datasets and domains.
+					<b> Self-supervised learning to order point clouds.</b> We develop the first self-supervised method to order 3D
+points in terms of their importance. By utilizing a novel
+Point Scorer and differentiable Point Sorter module, we
+leverage a hierarchical contrastive loss for training to output a point-wise ordering without the need for any labels.
+This can be used to select subsets that not only outperform
+previous heuristic methods but even the current, supervised,
+state of the art on downstream tasks.
 				</td>
 			</tr>
 		</table>
@@ -207,10 +210,15 @@
 		<tr>
 			<td>
 				<ul>
-					<li>A minimal framework for training neural networks with a single datum from scratch using distillation.</li>
-					<li>Extensive ablations of the proposed method, such as the dependency on the source image, the choice of augmentations and network architectures.</li>
-					<li>Large scale empirical evidence of neural networks' ability to extrapolate on > 12 vision and audio datasets.</li>
-					<li>Qualitative insights on what and how neural networks trained with a single image learn.</li>
+					<li>We propose the setting of self-ordering point clouds
+by self-supervised learning, in which each point in a
+3D cloud is ranked according to its importance without
+relying on any annotations.</li>
+					<li>We develop an end-to-end trainable approach to learn
+a point-wise ordering. For this, we develop a novel
+differentiable point scoring-sorting strategy and construct a hierarchical contrastive scheme to obtain selfsupervision signals.</li>
+					<li>We extensively ablate the method and show its scalability and superior performance even compared to supervised point ordering methods on multiple datasets
+and tasks including zero-shot ordering of point clouds.</li>
 				</ul>
 			</td>
 		</tr>
@@ -222,7 +230,7 @@
 		<center><h1>Abstract</h1></center>
 		<tr>
 			<td>
-				What can neural networks learn about the visual world when provided with only a single image as input? While any image obviously cannot contain the multitudes of all existing objects, scenes and lighting conditions – within the space of all  256<sup>3x224x224</sup> possible 224-sized square images, it might still provide a strong prior for natural images. To analyze this <i>augmented image prior</i> hypothesis, we develop a simple framework for training neural networks from scratch using a single image and augmentations using knowledge distillation from a supervised pretrained teacher. With this, we find the answer to the above question to be: <i>surprisingly, a lot</i>.  In quantitative terms, we find accuracies of 94%/74% on CIFAR-10/100, 69% on ImageNet, and by extending this method to video and audio, 51% on Kinetics-400 and 84% on SpeechCommands. In extensive analyses spanning 13 datasets, we disentangle the effect of augmentations, choice of data and network architectures and also provide qualitative evaluations that include lucid <i>panda neurons</i> in networks that have never even seen one.
+				In this paper we address the task of finding representative subsets of points in a 3D point cloud by means of a point-wise ordering. Only a few works have tried to address this challenging vision problem, all with the help of hard to obtain point and cloud labels. Different from these works, we introduce the task of point-wise ordering in 3D point clouds through self-supervision, which we call self-ordering. We further contribute the first end-to-end trainable network that learns a point-wise ordering in a self-supervised fashion. It utilizes a novel differentiable point scoring-sorting strategy and it constructs an hierarchical contrastive scheme to obtain self-supervision signals. We extensively ablate the method and show its superior performance even compared to supervised ordering methods on multiple datasets and tasks including zero-shot ordering of point clouds from unseen categories.
 			</td>
 		</tr>
 	</table>
@@ -230,138 +238,147 @@
 
 	<hr>
 
-	<table align=center width=850px>
-		<center><h1>Talk</h1></center>
-		<tr>
-			<td>
-				<center><iframe width="560" height="315" src="https://www.youtube.com/embed/I0YycIndk7M" title="YouTube video player" 
-		frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-					</center></td>
-		</tr>
-	</table>
-	<br>
+<!--	<table align=center width=850px>-->
+<!--		<center><h1>Talk</h1></center>-->
+<!--		<tr>-->
+<!--			<td>-->
+<!--				<center><iframe width="560" height="315" src="https://www.youtube.com/embed/I0YycIndk7M" title="YouTube video player" -->
+<!--		frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>-->
+<!--					</center></td>-->
+<!--		</tr>-->
+<!--	</table>-->
+<!--	<br>-->
 
-        <hr>
+<!--        <hr>-->
 
-	<table align=center width=850px>
-		<center><h1>Selected Results</h1></center>
-		<tr class="spaceUnder">
-			<td>
-				<center>
-					<p><b>Distilling dataset.</b> 1 image + augmentations ≈ almost 50K in-domain CIFAR-10/100images.</p>
-					<img class="round" style="width:400px" src="./resources/tab_1.png"/>
-				</center>
-			</td>
-		</tr>
-		<tr class="spaceUnder">
-			<td>
-				<center>
-					<p><b>Distilling source image.</b> Content matters: less dense images do not train as well.</p>
-					<img class="round" style="width:250px" src="./resources/distilling_source_image.PNG"/>
-				</center>
-			</td>
-		</tr>
-		
-		<tr class="spaceUnder">
-			<td>
-				<center>
-					<p><b>Distilling audio representations.</b> Our approach also generalizes for audio by using 1 audio clip + augmentations.</p>
-					<img class="round" style="width:550px" src="./resources/tab_7_wo_ref.png"/>
-				</center>
-			</td>
-		</tr>
+<!--	<table align=center width=850px>-->
+<!--		<center><h1>Selected Results</h1></center>-->
+<!--		<tr class="spaceUnder">-->
+<!--			<td>-->
+<!--				<center>-->
+<!--					<p><b>Distilling dataset.</b> 1 image + augmentations ≈ almost 50K in-domain CIFAR-10/100images.</p>-->
+<!--					<img class="round" style="width:400px" src="./resources/tab_1.png"/>-->
+<!--				</center>-->
+<!--			</td>-->
+<!--		</tr>-->
+<!--		<tr class="spaceUnder">-->
+<!--			<td>-->
+<!--				<center>-->
+<!--					<p><b>Distilling source image.</b> Content matters: less dense images do not train as well.</p>-->
+<!--					<img class="round" style="width:250px" src="./resources/distilling_source_image.PNG"/>-->
+<!--				</center>-->
+<!--			</td>-->
+<!--		</tr>-->
+<!--		-->
+<!--		<tr class="spaceUnder">-->
+<!--			<td>-->
+<!--				<center>-->
+<!--					<p><b>Distilling audio representations.</b> Our approach also generalizes for audio by using 1 audio clip + augmentations.</p>-->
+<!--					<img class="round" style="width:550px" src="./resources/tab_7_wo_ref.png"/>-->
+<!--				</center>-->
+<!--			</td>-->
+<!--		</tr>-->
 
-		<tr class="spaceUnder">
-			<td>
-				<center>
-					<p><b>Larger scale datasets.</b> Our method scales to larger models utilizing 224×224-sized images.</p>
-					<img class="round" style="width:550px" src="./resources/large_scale_datasets.PNG"/>
-				</center>
-			</td>
-		</tr>
-		
-		<tr class="spaceUnder">
-			<td>
-				<center>
-					<p><b>Analysis of IN-1k model distillations.</b> We vary distillation dataset and teacher and student configs. We achieve 69% top-1 single-crop accuracy on IN-1k. Even with just argmax (AM) signal, performance remains high at 44%. See more details in the paper.</p>
-					<img class="round" style="width:500px" src="./resources/in1k_distillations.PNG"/>
-				</center>
-			</td>
-		</tr>
-	
-		<tr class="spaceUnder">
-			<td>
-				<center>
-					<p><b>Varying student width or depth.</b> We find wide models benefit more from parameter-increase an even reach the teacher's performance on ImageNet.</p>
-					<img class="round" style="width:500px" src="./resources/scaling_params_in1k.png"/>
-				</center>
-			</td>
-		</tr>
-		
-		<tr class="spaceUnder">
-			<td>
-				<center>
-					<p><b>Visualizing neurons.</b> We find neurons that fire for objects the network has never seen.</p>
-					<img class="round" style="width:500px" src="./resources/fig_7.png"/>
-				</center>
-			</td>
-		</tr>
-	</table>
+<!--		<tr class="spaceUnder">-->
+<!--			<td>-->
+<!--				<center>-->
+<!--					<p><b>Larger scale datasets.</b> Our method scales to larger models utilizing 224×224-sized images.</p>-->
+<!--					<img class="round" style="width:550px" src="./resources/large_scale_datasets.PNG"/>-->
+<!--				</center>-->
+<!--			</td>-->
+<!--		</tr>-->
+<!--		-->
+<!--		<tr class="spaceUnder">-->
+<!--			<td>-->
+<!--				<center>-->
+<!--					<p><b>Analysis of IN-1k model distillations.</b> We vary distillation dataset and teacher and student configs. We achieve 69% top-1 single-crop accuracy on IN-1k. Even with just argmax (AM) signal, performance remains high at 44%. See more details in the paper.</p>-->
+<!--					<img class="round" style="width:500px" src="./resources/in1k_distillations.PNG"/>-->
+<!--				</center>-->
+<!--			</td>-->
+<!--		</tr>-->
+<!--	-->
+<!--		<tr class="spaceUnder">-->
+<!--			<td>-->
+<!--				<center>-->
+<!--					<p><b>Varying student width or depth.</b> We find wide models benefit more from parameter-increase an even reach the teacher's performance on ImageNet.</p>-->
+<!--					<img class="round" style="width:500px" src="./resources/scaling_params_in1k.png"/>-->
+<!--				</center>-->
+<!--			</td>-->
+<!--		</tr>-->
+<!--		-->
+<!--		<tr class="spaceUnder">-->
+<!--			<td>-->
+<!--				<center>-->
+<!--					<p><b>Visualizing neurons.</b> We find neurons that fire for objects the network has never seen.</p>-->
+<!--					<img class="round" style="width:500px" src="./resources/fig_7.png"/>-->
+<!--				</center>-->
+<!--			</td>-->
+<!--		</tr>-->
+<!--	</table>-->
 
-	<br>
+<!--	<br>-->
 
-	<hr>
+<!--	<hr>-->
 
-	<table align=center width=850px>
-		<center><h1>Our training data</h1></center>
-		<tr>
-			<td>
-				       <img class="round"style="width:49.5%" src="./resources/patches.png"/>
-					   <img class="round" style="width:49.5%" src="./resources/vid.gif"/>
-				<p><b>Training data.</b> We generate a dataset from a single datum and use it for training networks from scratch.</p>
-			</td>
-		</tr>
-	</table>
+<!--	<table align=center width=850px>-->
+<!--		<center><h1>Our training data</h1></center>-->
+<!--		<tr>-->
+<!--			<td>-->
+<!--				       <img class="round"style="width:49.5%" src="./resources/patches.png"/>-->
+<!--					   <img class="round" style="width:49.5%" src="./resources/vid.gif"/>-->
+<!--				<p><b>Training data.</b> We generate a dataset from a single datum and use it for training networks from scratch.</p>-->
+<!--			</td>-->
+<!--		</tr>-->
+<!--	</table>-->
 
-	<hr>
-	<br>
+<!--	<hr>-->
+<!--	<br>-->
 
-	<table align=center width=450px>
-		<center><h1>Paper and Supplementary Material</h1></center>
-		<tr>
-			<td><a href=""><img class="layered-paper-big" style="height:175px" src="./resources/paper.png"/></a></td>
-			<td><span style="font-size:14pt">Y. M. Asano, A. Saeed<br>
-				<b>The Augmented Image Prior: Distilling 1000 Classes by Extrapolating from a Single Image</b><br>
-				(<a href="http://www.arxiv.org/abs/2112.00725">ICLR 2023</a>)<br>
-				<!-- (<a href="./resources/camera-ready.pdf">camera ready</a>)<br> -->
-				<span style="font-size:4pt"><a href=""><br></a>
-				</span>
-			</td>
-		</tr>
-	</table>
-	<br>
+<!--	<table align=center width=450px>-->
+<!--		<center><h1>Paper and Supplementary Material</h1></center>-->
+<!--		<tr>-->
+<!--			<td><a href=""><img class="layered-paper-big" style="height:175px" src="./resources/paper.png"/></a></td>-->
+<!--			<td><span style="font-size:14pt">Y. M. Asano, A. Saeed<br>-->
+<!--				<b>The Augmented Image Prior: Distilling 1000 Classes by Extrapolating from a Single Image</b><br>-->
+<!--				(<a href="http://www.arxiv.org/abs/2112.00725">ICLR 2023</a>)<br>-->
+<!--				&lt;!&ndash; (<a href="./resources/camera-ready.pdf">camera ready</a>)<br> &ndash;&gt;-->
+<!--				<span style="font-size:4pt"><a href=""><br></a>-->
+<!--				</span>-->
+<!--			</td>-->
+<!--		</tr>-->
+<!--	</table>-->
+<!--	<br>-->
 
 	<table align=center width=600px>
 		<tr>
-			<td><span style="font-size:14pt"><center>
-				<a href="https://yukimasano.github.io/data/asano2023extrapolating.bib">[Bibtex]</a>
-			</center></td>
-		</tr>
-	</table>
-
-	<hr>
-	<br>
- 
-	<table align=center width=900px>
-		<tr>
-			<td width=400px>
-				<left>
-					<center><h1>Acknowledgements</h1></center>
-					Y.M.A. is thankful for MLRA funding from AWS. We also thank T. Blankevoort, A.F. Biten and S. Albanie for useful comments on a draft of this paper.
-				</left>
+			<td>
+				<h2 class="title">BibTeX</h2>
+      <pre style="background-color: #f5f5f5;"><code>
+@inproceedings{lippe2023biscuit,
+    title        = {BISCUIT: Causal Representation Learning from Binary Interactions},
+    author       = {Lippe, Phillip and Magliacane, Sara and L{\"o}we, Sindy and Asano, Yuki M and Cohen, Taco and Gavves, Efstratios},
+    year         = 2023,
+    booktitle    = {The 39th Conference on Uncertainty in Artificial Intelligence},
+    url          = {https://openreview.net/forum?id=VS7Dn31xuB}
+}
+      </code></pre>
 			</td>
 		</tr>
 	</table>
+
+<!--	<hr>-->
+<!--	<br>-->
+ 
+<!--	<table align=center width=900px>-->
+<!--		<tr>-->
+<!--			<td width=400px>-->
+<!--				<left>-->
+<!--					<center><h1>Acknowledgements</h1></center>-->
+<!--					Y.M.A. is thankful for MLRA funding from AWS. We also thank T. Blankevoort, A.F. Biten and S. Albanie for useful comments on a draft of this paper.-->
+<!--				</left>-->
+<!--			</td>-->
+<!--		</tr>-->
+<!--	</table>-->
 
 <br>
 </body>
